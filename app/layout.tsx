@@ -58,9 +58,10 @@ export const metadata: Metadata = {
       "Pantau persebaran titik api karhutla, radius bahaya panas & asap, arah angin Open-Meteo, dan indeks ISPU secara langsung untuk seluruh wilayah Indonesia.",
     images: [
       {
-        url: "/images/og-siaganusa.jpg",
-        width: 1376,
-        height: 768,
+        url: "https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2",
+        secureUrl: "https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2",
+        width: 1200,
+        height: 630,
         alt: "SiagaNusa – Pemantauan Kebakaran Hutan & Lahan Indonesia Real-Time",
         type: "image/jpeg",
       },
@@ -71,7 +72,7 @@ export const metadata: Metadata = {
     title: "SiagaNusa – Pemantauan Kebakaran Hutan & Lahan Indonesia Real-Time",
     description:
       "Pantau persebaran titik api karhutla, radius bahaya panas & asap, arah angin Open-Meteo, dan indeks ISPU secara langsung untuk seluruh wilayah Indonesia.",
-    images: ["/images/og-siaganusa.jpg"],
+    images: ["https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2"],
     creator: "@levystudios",
   },
   robots: {

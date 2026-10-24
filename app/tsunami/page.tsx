@@ -25,9 +25,10 @@ export const metadata: Metadata = {
     locale: 'id_ID',
     images: [
       {
-        url: '/images/og-siaganusa.jpg',
-        width: 1376,
-        height: 768,
+        url: 'https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2',
+        secureUrl: 'https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2',
+        width: 1200,
+        height: 630,
         alt: 'Simulator Tsunami Nusantara – SiagaNusa',
         type: 'image/jpeg',
       },
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
     title: 'Simulator Tsunami Nusantara – SiagaNusa',
     description:
       'Platform numerik interaktif memodelkan penjalaran gelombang tsunami dari patahan megathrust laut dalam hingga proyeksi zona rendaman permukiman.',
-    images: ['/images/og-siaganusa.jpg'],
+    images: ['https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2'],
     creator: '@levystudios',
   },
 };
