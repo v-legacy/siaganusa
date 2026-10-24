@@ -84,26 +84,32 @@ export default function Header({
             <button
               id="btn-header-donation"
               type="button"
-              className="header-donation-btn"
+              className="header-nav-btn header-donation-btn"
               onClick={onOpenDonation}
               title="Dukung / Donasi Operasional SiagaNusa via Saweria"
               aria-label="Donasi Saweria"
             >
-              <Heart size={15} className="header-heart-icon" />
-              <span>Support</span>
+              <Heart size={15} className="header-heart-icon header-nav-icon" />
+              <span className="header-nav-label">
+                <span className="header-label-long">Support</span>
+                <span className="header-label-short">Support</span>
+              </span>
             </button>
           )}
 
           {onOpenTour && (
             <button
               id="btn-header-open-tour"
-              className="header-tour-btn"
+              className="header-nav-btn header-tour-btn"
               onClick={onOpenTour}
               title="Buka Panduan Fitur (Coach Mark)"
               aria-label="Buka Panduan Fitur"
             >
-              <HelpCircle size={15} />
-              <span>Panduan</span>
+              <HelpCircle size={15} className="header-nav-icon" />
+              <span className="header-nav-label">
+                <span className="header-label-long">Panduan</span>
+                <span className="header-label-short">Panduan</span>
+              </span>
             </button>
           )}
 
@@ -114,7 +120,7 @@ export default function Header({
             aria-label={theme === 'dark' ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'}
             title={theme === 'dark' ? 'Mode Terang' : 'Mode Gelap'}
           >
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
           </button>
         </div>
       </div>
