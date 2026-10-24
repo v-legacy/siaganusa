@@ -103,7 +103,7 @@ export default function Header({
           </Link>
         </div>
 
-        {/* ─── Live Status Badge ─────────────────────────────────────────── */}
+
         <div className="header-status" aria-live="polite" aria-label="Status pemantauan">
           {isLoading ? (
             <div className="status-badge status-badge--loading">
