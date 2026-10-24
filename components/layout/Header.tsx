@@ -6,7 +6,8 @@
 
 'use client';
 
-import { Sun, Moon, Flame, RefreshCw, HelpCircle, Heart } from 'lucide-react';
+import Link from 'next/link';
+import { Sun, Moon, Flame, RefreshCw, HelpCircle, Heart, Waves } from 'lucide-react';
 import type { Theme } from '@/hooks/useTheme';
 import type { HotspotSummary } from '@/types/disaster';
 
@@ -66,8 +67,19 @@ export default function Header({
           ) : null}
         </div>
 
-        {/* ─── Action Buttons ────────────────────────────────────────────── */}
         <div className="header-actions">
+          {/* Tombol Akses Simulator Tsunami */}
+          <Link
+            id="btn-header-tsunami"
+            href="/tsunami"
+            className="header-tsunami-btn"
+            title="Simulator Tsunami"
+            aria-label="Simulator Tsunami"
+          >
+            <Waves size={15} />
+            <span>Simulator Tsunami</span>
+          </Link>
+
           {onOpenDonation && (
             <button
               id="btn-header-donation"
