@@ -72,15 +72,12 @@ export default function Header({
           <Link
             id="btn-header-tsunami"
             href="/tsunami"
-            className="header-nav-btn header-tsunami-btn"
+            className="header-tsunami-btn"
             title="Simulator Tsunami"
             aria-label="Simulator Tsunami"
           >
-            <Waves size={15} className="header-nav-icon" />
-            <span className="header-nav-label">
-              <span className="header-label-long">Simulator Tsunami</span>
-              <span className="header-label-short">Tsunami</span>
-            </span>
+            <Waves size={15} />
+            <span>Simulator Tsunami</span>
           </Link>
 
           {onOpenDonation && (

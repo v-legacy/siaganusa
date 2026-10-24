@@ -4652,11 +4652,21 @@ body {
   color: #ffffff;
 }
 
-/* ─── Simulator Tsunami Button ─── */
+/* ─── Header Tsunami Simulator Button (Konsisten dengan Navigasi Lain) ─── */
 .header-tsunami-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   background: #ecfeff;
   border: 1px solid #a5f3fc;
   color: #0891b2;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
 }
 
 .header-tsunami-btn:hover {
@@ -4675,184 +4685,7 @@ body {
 
 [data-theme="dark"] .header-tsunami-btn:hover {
   background: rgba(6, 182, 212, 0.28);
-  border-color: #06b6d4;
   color: #ffffff;
-}
-
-/* ─── Responsive Header Navigation (iPad & Tablet: 768px - 1023px) ───────── */
-@media (min-width: 768px) and (max-width: 1023.98px) {
-  .header-inner {
-    padding: 0 14px;
-    gap: 10px;
-  }
-
-  /* Sembunyikan jam live status di iPad agar ruang tombol lebih leluasa */
-  .header-status .status-time {
-    display: none;
-  }
-
-  .header-actions {
-    gap: 6px;
-  }
-
-  .header-nav-btn {
-    height: 35px;
-    padding: 5px 9px;
-    font-size: 11px;
-    gap: 5px;
-  }
-
-  .theme-toggle-btn {
-    width: 35px;
-    height: 35px;
-  }
-}
-
-/* iPad Portrait / layar sempit 768px - 880px */
-@media (min-width: 768px) and (max-width: 880px) {
-  .header-tsunami-btn .header-label-long {
-    display: none;
-  }
-  .header-tsunami-btn .header-label-short {
-    display: inline;
-  }
-}
-
-/* ─── Responsive Header Navigation (Mobile: < 768px) ─────────────────────── */
-@media (max-width: 767.98px) {
-  .header-inner {
-    padding: 0 12px;
-    gap: 8px;
-  }
-
-  .header-brand {
-    gap: 8px;
-  }
-
-  .header-logo {
-    width: 32px;
-    height: 32px;
-  }
-
-  .header-brand-text .header-title {
-    font-size: 16px;
-  }
-
-  .header-brand-text .header-subtitle {
-    display: none;
-  }
-
-  /* Compact status badge di mobile */
-  .header-status .status-time,
-  .header-status .status-label {
-    display: none;
-  }
-
-  .header-status .status-badge {
-    padding: 4px 8px;
-    font-size: 11px;
-    gap: 4px;
-  }
-
-  .header-actions {
-    gap: 5px;
-  }
-
-  .header-nav-btn {
-    height: 34px;
-    padding: 5px 8px;
-    font-size: 11px;
-    gap: 4px;
-    border-radius: 7px;
-  }
-
-  .theme-toggle-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: 7px;
-  }
-
-  /* Gunakan label ringkas di layar mobile */
-  .header-nav-btn .header-label-long {
-    display: none;
-  }
-  .header-nav-btn .header-label-short {
-    display: inline;
-  }
-}
-
-/* ─── Responsive Header Navigation (Compact Mobile: < 540px & < 420px) ───── */
-@media (max-width: 539.98px) {
-  /* Di bawah 540px, sembunyikan live status badge di header agar tombol leluasa */
-  .header-status {
-    display: none;
-  }
-
-  /* Tombol Panduan menjadi ikon square di layar compact mobile agar Tsunami & Support tetap jelas */
-  .header-tour-btn .header-nav-label {
-    display: none;
-  }
-  .header-tour-btn {
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 419.98px) {
-  .header-inner {
-    padding: 0 10px;
-    gap: 6px;
-  }
-
-  .header-actions {
-    gap: 4px;
-  }
-
-  /* Di layar sempit (< 420px), Support menjadi ikon agar tidak tumpang tindih */
-  .header-donation-btn .header-nav-label {
-    display: none;
-  }
-  .header-donation-btn {
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    justify-content: center;
-  }
-
-  /* Simulator Tsunami tetap memprioritaskan teks "Tsunami" */
-  .header-tsunami-btn {
-    padding: 5px 7px;
-    font-size: 10.5px;
-    gap: 3.5px;
-  }
-
-  .header-brand {
-    gap: 6px;
-  }
-
-  .header-brand-text .header-title {
-    font-size: 15px;
-  }
-
-  .header-logo {
-    width: 30px;
-    height: 30px;
-  }
-}
-
-@media (max-width: 340px) {
-  /* Ekstrem kecil (320px fold display) */
-  .header-tsunami-btn .header-nav-label {
-    display: none;
-  }
-  .header-tsunami-btn {
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    justify-content: center;
-  }
 }
 
 /* Footer Support Link */
