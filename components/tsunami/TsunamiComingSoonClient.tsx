@@ -12,20 +12,15 @@ import Link from 'next/link';
 import {
   Waves,
   Activity,
-  MapPin,
   ShieldAlert,
   ArrowLeft,
   Sparkles,
   Bell,
   CheckCircle2,
   Compass,
-  Zap,
   Layers,
   Radio,
-  Clock,
   Gauge,
-  Navigation,
-  ExternalLink,
 } from 'lucide-react';
 import TsunamiHeroIllustration from './TsunamiHeroIllustration';
 

@@ -7,7 +7,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import {
@@ -23,6 +23,8 @@ import {
 } from 'lucide-react';
 import type { Theme } from '@/hooks/useTheme';
 import type { HotspotSummary } from '@/types/disaster';
+
+const emptySubscribe = () => () => {};
 
 interface HeaderProps {
   theme: Theme;
@@ -44,11 +46,11 @@ export default function Header({
   onOpenDonation,
 }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   const lastUpdateText = fetchedAt
     ? new Date(fetchedAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })

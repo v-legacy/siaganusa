@@ -12,7 +12,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import {
@@ -24,6 +24,8 @@ import {
   Heart,
   Sparkles,
 } from 'lucide-react';
+
+const emptySubscribe = () => () => {};
 
 export const SAWERIA_CONFIG = {
   streamKey: '96a027982f3b157e2ee6a9e254e985c3',
@@ -40,12 +42,12 @@ interface DonationModalProps {
 }
 
 export default function DonationModal({ isOpen, onClose }: DonationModalProps) {
-  const [mounted, setMounted] = useState<boolean>(false);
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
   const [isCopied, setIsCopied] = useState<boolean>(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Tutup dengan tombol Escape
   useEffect(() => {

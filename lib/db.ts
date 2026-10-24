@@ -2,7 +2,6 @@ import postgres from 'postgres';
 
 // Hindari multiple instances koneksi di Next.js development (Hot Module Reloading)
 declare global {
-  // eslint-disable-next-line no-var
   var __globalSql: postgres.Sql | undefined;
 }
 
