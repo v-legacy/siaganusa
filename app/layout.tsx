@@ -32,8 +32,10 @@ export default function RootLayout({
   return (
     <html lang="id" suppressHydrationWarning>
       <head>
-        {/* Preconnect ke tile server OpenStreetMap */}
-        <link rel="preconnect" href="https://tile.openstreetmap.org" crossOrigin="" />
+        {/* Preconnect ke tile server OpenStreetMap.
+            Tanpa crossOrigin: tile Leaflet dimuat sebagai <img> non-CORS, sehingga
+            koneksi CORS tidak akan pernah dipakai ulang oleh request tile. */}
+        <link rel="preconnect" href="https://tile.openstreetmap.org" />
         <link rel="dns-prefetch" href="https://tile.openstreetmap.org" />
       </head>
       <body className={`${inter.variable} antialiased`}>{children}</body>

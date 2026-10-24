@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import {
   Card,
   CardHeader,
@@ -29,12 +30,27 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
-import TrafficTimelineChart from '@/components/admin/TrafficTimelineChart';
-import SocialReferralChart from '@/components/admin/SocialReferralChart';
-import DeviceDistributionChart from '@/components/admin/DeviceDistributionChart';
 import CountryDistributionList from '@/components/admin/CountryDistributionList';
-import RecentVisitsTable from '@/components/admin/RecentVisitsTable';
 import type { AnalyticsSummary } from '@/lib/analytics';
+
+// ─── Code-splitting ──────────────────────────────────────────────────────────
+// Recharts (+ d3) adalah dependensi terberat di dashboard. Chart dimuat sebagai
+// chunk terpisah khusus klien (ResponsiveContainer butuh ukuran DOM), dengan
+// skeleton yang tingginya sama persis dengan chart agar tidak terjadi CLS.
+const TrafficTimelineChart = dynamic(() => import('@/components/admin/TrafficTimelineChart'), {
+  ssr: false,
+  loading: () => <Skeleton className="h-56 sm:h-72 w-full" />,
+});
+const SocialReferralChart = dynamic(() => import('@/components/admin/SocialReferralChart'), {
+  ssr: false,
+  loading: () => <Skeleton className="h-56 sm:h-64 w-full" />,
+});
+const DeviceDistributionChart = dynamic(() => import('@/components/admin/DeviceDistributionChart'), {
+  ssr: false,
+  loading: () => <Skeleton className="h-64 w-full" />,
+});
+// Tabel log berada di bawah fold: tetap di-SSR, JS-nya dipisah ke chunk sendiri.
+const RecentVisitsTable = dynamic(() => import('@/components/admin/RecentVisitsTable'));
 
 const AUTO_REFRESH_MS = 60_000;
 

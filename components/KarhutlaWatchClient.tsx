@@ -7,17 +7,31 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import Header from '@/components/layout/Header';
 import DisasterMap from '@/components/map/DisasterMap';
 import MapFloatingControls from '@/components/map/MapFloatingControls';
-import DisasterTable from '@/components/disaster/DisasterTable';
-import CoachMarkTour, { COACHMARK_STORAGE_KEY } from '@/components/tutorial/CoachMarkTour';
-import DonationModal from '@/components/donation/DonationModal';
+import { COACHMARK_STORAGE_KEY } from '@/constants/coachmark';
 import { useDisasterData } from '@/hooks/useDisasterData';
 import { useTheme } from '@/hooks/useTheme';
 import type { DisasterHotspot } from '@/types/disaster';
 import type { LocationWeather, RegionalZone } from '@/types/weather';
 import type { AirQualityData } from '@/types/airQuality';
+
+// ─── Code-splitting ──────────────────────────────────────────────────────────
+// Tabel rincian berada di bawah fold: tetap di-SSR (HTML langsung tersedia, tanpa
+// layout shift), namun JS-nya dipisah ke chunk tersendiri agar tidak membebani
+// bundle awal yang dibutuhkan peta.
+const DisasterTable = dynamic(() => import('@/components/disaster/DisasterTable'));
+
+// Overlay interaktif hanya dibutuhkan setelah interaksi pengguna → muat on-demand
+// di klien saja (keduanya memakai portal/DOM API dan tidak terlihat saat SSR).
+const CoachMarkTour = dynamic(() => import('@/components/tutorial/CoachMarkTour'), {
+  ssr: false,
+});
+const DonationModal = dynamic(() => import('@/components/donation/DonationModal'), {
+  ssr: false,
+});
 
 export default function KarhutlaWatchClient() {
   const { hotspots, summary, isLoading, error, fetchedAt, refresh } = useDisasterData();
@@ -343,17 +357,22 @@ export default function KarhutlaWatchClient() {
       </footer>
 
       {/* ─── Interactive Coach Mark / Feature Walkthrough ──────────────── */}
-      <CoachMarkTour
-        isOpen={isTourOpen}
-        onClose={handleCloseTour}
-        onComplete={handleCloseTour}
-      />
+      {/* Di-mount hanya saat dibuka agar chunk-nya tidak diunduh sebelum dibutuhkan */}
+      {isTourOpen && (
+        <CoachMarkTour
+          isOpen={isTourOpen}
+          onClose={handleCloseTour}
+          onComplete={handleCloseTour}
+        />
+      )}
 
       {/* ─── Modal Donasi Saweria ───────────────────────────────────────── */}
-      <DonationModal
-        isOpen={isDonationOpen}
-        onClose={handleCloseDonation}
-      />
+      {isDonationOpen && (
+        <DonationModal
+          isOpen={isDonationOpen}
+          onClose={handleCloseDonation}
+        />
+      )}
     </div>
   );
 }

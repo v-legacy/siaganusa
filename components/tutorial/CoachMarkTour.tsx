@@ -21,7 +21,9 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 
-export const COACHMARK_STORAGE_KEY = 'siaganusa_coachmark_dismissed';
+import { COACHMARK_STORAGE_KEY } from '@/constants/coachmark';
+
+export { COACHMARK_STORAGE_KEY };
 
 export interface CoachMarkStep {
   id: string;

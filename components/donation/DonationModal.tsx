@@ -119,7 +119,7 @@ export default function DonationModal({ isOpen, onClose }: DonationModalProps) {
                 width={48}
                 height={48}
                 className="saweria-avatar-img"
-                priority
+                loading="eager"
               />
             </div>
             <span className="saweria-floating-heart" aria-hidden="true">
@@ -181,17 +181,19 @@ export default function DonationModal({ isOpen, onClose }: DonationModalProps) {
                   width={204}
                   height={204}
                   className="donation-qr-render"
-                  priority
+                  loading="eager"
+                  fetchPriority="high"
                   unoptimized
                 />
                 {/* Badge Maskot Saweria di Tengah Barcode */}
                 <div className="donation-qr-center-mascot" aria-hidden="true">
                   <Image
                     src="/images/saweria-duck.png"
-                    alt="Saweria Mascot"
+                    alt=""
                     width={26}
                     height={26}
                     className="donation-duck-center-img"
+                    loading="lazy"
                   />
                 </div>
               </div>
