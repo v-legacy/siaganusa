@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import TsunamiComingSoonClient from '@/components/tsunami/TsunamiComingSoonClient';
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://siaganusa-app.levy-studios.site';
+
 export const metadata: Metadata = {
   title: 'Simulator Tsunami Nusantara – Pemodelan Gelombang Megathrust & Inundasi Pesisir',
   description:
@@ -20,13 +23,13 @@ export const metadata: Metadata = {
     description:
       'Platform numerik interaktif memodelkan penjalaran gelombang tsunami dari patahan megathrust laut dalam hingga proyeksi zona rendaman permukiman.',
     type: 'website',
-    url: 'https://siaganusa.vercel.app/tsunami',
+    url: `${SITE_URL}/tsunami`,
     siteName: 'SiagaNusa',
     locale: 'id_ID',
     images: [
       {
-        url: 'https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2',
-        secureUrl: 'https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2',
+        url: `${SITE_URL}/images/og-siaganusa.jpg?v=2`,
+        secureUrl: `${SITE_URL}/images/og-siaganusa.jpg?v=2`,
         width: 1200,
         height: 630,
         alt: 'Simulator Tsunami Nusantara – SiagaNusa',
@@ -39,7 +42,7 @@ export const metadata: Metadata = {
     title: 'Simulator Tsunami Nusantara – SiagaNusa',
     description:
       'Platform numerik interaktif memodelkan penjalaran gelombang tsunami dari patahan megathrust laut dalam hingga proyeksi zona rendaman permukiman.',
-    images: ['https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2'],
+    images: [`${SITE_URL}/images/og-siaganusa.jpg?v=2`],
     creator: '@levystudios',
   },
 };

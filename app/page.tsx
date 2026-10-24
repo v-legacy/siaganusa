@@ -8,6 +8,9 @@
 import type { Metadata } from 'next';
 import KarhutlaWatchClient from '@/components/KarhutlaWatchClient';
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://siaganusa-app.levy-studios.site';
+
 export const metadata: Metadata = {
   title: 'SiagaNusa – Pemantauan Kebakaran Hutan & Lahan Indonesia Real-Time',
   description:
@@ -27,20 +30,20 @@ export const metadata: Metadata = {
     'SiagaNusa',
   ],
   alternates: {
-    canonical: 'https://siaganusa.vercel.app',
+    canonical: SITE_URL,
   },
   openGraph: {
     title: 'SiagaNusa – Pemantauan Kebakaran Hutan & Lahan Indonesia Real-Time',
     description:
       'Pantau persebaran titik api karhutla, radius bahaya panas & asap, arah angin Open-Meteo, dan indeks ISPU secara langsung untuk seluruh wilayah Indonesia.',
-    url: 'https://siaganusa.vercel.app',
+    url: SITE_URL,
     siteName: 'SiagaNusa',
     locale: 'id_ID',
     type: 'website',
     images: [
       {
-        url: 'https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2',
-        secureUrl: 'https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2',
+        url: `${SITE_URL}/images/og-siaganusa.jpg?v=2`,
+        secureUrl: `${SITE_URL}/images/og-siaganusa.jpg?v=2`,
         width: 1200,
         height: 630,
         alt: 'SiagaNusa – Pemantauan Kebakaran Hutan & Lahan Indonesia Real-Time',
@@ -53,7 +56,7 @@ export const metadata: Metadata = {
     title: 'SiagaNusa – Pemantauan Kebakaran Hutan & Lahan Indonesia Real-Time',
     description:
       'Pantau persebaran titik api karhutla, radius bahaya panas & asap, arah angin Open-Meteo, dan indeks ISPU secara langsung untuk seluruh wilayah Indonesia.',
-    images: ['https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2'],
+    images: [`${SITE_URL}/images/og-siaganusa.jpg?v=2`],
     creator: '@levystudios',
   },
 };

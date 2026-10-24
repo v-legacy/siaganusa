@@ -14,8 +14,11 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://siaganusa-app.levy-studios.site";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://siaganusa.vercel.app"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "SiagaNusa – Pemantauan Kebakaran Hutan & Lahan Indonesia Real-Time",
     template: "%s | SiagaNusa",
@@ -23,7 +26,7 @@ export const metadata: Metadata = {
   description:
     "Platform pemantauan titik api (hotspot) kebakaran hutan dan lahan (Karhutla) Indonesia secara real-time via data satelit NASA VIIRS & MODIS. Pantau peta interaktif, arah angin, dan kualitas udara ISPU.",
   applicationName: "SiagaNusa",
-  authors: [{ name: "SiagaNusa", url: "https://siaganusa.vercel.app" }],
+  authors: [{ name: "SiagaNusa", url: SITE_URL }],
   generator: "Next.js",
   keywords: [
     "SiagaNusa",
@@ -46,20 +49,20 @@ export const metadata: Metadata = {
   publisher: "SiagaNusa",
   category: "Disaster Monitoring",
   alternates: {
-    canonical: "https://siaganusa.vercel.app",
+    canonical: SITE_URL,
   },
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://siaganusa.vercel.app",
+    url: SITE_URL,
     siteName: "SiagaNusa",
     title: "SiagaNusa – Pemantauan Kebakaran Hutan & Lahan Indonesia Real-Time",
     description:
       "Pantau persebaran titik api karhutla, radius bahaya panas & asap, arah angin Open-Meteo, dan indeks ISPU secara langsung untuk seluruh wilayah Indonesia.",
     images: [
       {
-        url: "https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2",
-        secureUrl: "https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2",
+        url: `${SITE_URL}/images/og-siaganusa.jpg?v=2`,
+        secureUrl: `${SITE_URL}/images/og-siaganusa.jpg?v=2`,
         width: 1200,
         height: 630,
         alt: "SiagaNusa – Pemantauan Kebakaran Hutan & Lahan Indonesia Real-Time",
@@ -72,7 +75,7 @@ export const metadata: Metadata = {
     title: "SiagaNusa – Pemantauan Kebakaran Hutan & Lahan Indonesia Real-Time",
     description:
       "Pantau persebaran titik api karhutla, radius bahaya panas & asap, arah angin Open-Meteo, dan indeks ISPU secara langsung untuk seluruh wilayah Indonesia.",
-    images: ["https://siaganusa.vercel.app/images/og-siaganusa.jpg?v=2"],
+    images: [`${SITE_URL}/images/og-siaganusa.jpg?v=2`],
     creator: "@levystudios",
   },
   robots: {
