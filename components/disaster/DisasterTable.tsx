@@ -188,7 +188,11 @@ export default function DisasterTable({
     const confBadge = CONFIDENCE_BADGE[activeHotspot.confidence]?.label || 'Sedang';
     const confVal = activeHotspot.confidenceValue ?? 85;
     const frpStr = activeHotspot.maxFrp ? `${activeHotspot.maxFrp.toFixed(1)} MW` : 'Tidak Terukur';
-    const gmapsUrl = `https://www.google.com/maps?q=${activeHotspot.latitude.toFixed(5)},${activeHotspot.longitude.toFixed(5)}`;
+    const baseUrl =
+      typeof window !== 'undefined' && window.location.origin && !window.location.origin.includes('localhost')
+        ? window.location.origin
+        : 'https://siaganusa-app.levy-studios.site';
+    const siagaNusaUrl = `${baseUrl}/?hotspot=${encodeURIComponent(activeHotspot.id)}&lat=${activeHotspot.latitude.toFixed(5)}&lng=${activeHotspot.longitude.toFixed(5)}`;
 
     const airQualityInfo = selectedAirQuality
       ? `• Indeks ISPU: *${selectedAirQuality.ispuValue} — ${selectedAirQuality.ispuInfo.label.toUpperCase()}* (US AQI: ${selectedAirQuality.usAqi})\n• Konsentrasi Partikulat:\n  - PM2.5 (Asap Halus): *${selectedAirQuality.pm25} μg/m³*\n  - PM10 (Debu & Abu): *${selectedAirQuality.pm10} μg/m³*\n  - Karbon Monoksida (CO): *${selectedAirQuality.carbonMonoxide.toLocaleString('id-ID')} μg/m³*\n• Rekomendasi Medis: ${selectedAirQuality.ispuInfo.healthRecommendation}\n• Standar Masker: *${selectedAirQuality.ispuInfo.maskRecommendation}*`
@@ -205,6 +209,9 @@ export default function DisasterTable({
       : '• Rekomendasi Taktis: Basahi area vegetasi kering di depan arah perambatan api.';
 
     return `🚨 *LAPORAN SITUASI KARHUTLA (SITREP) — SIAGANUSA*
+🌐 *Pantau Langsung di Peta:*
+${siagaNusaUrl}
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📍 *Lokasi:* ${activeHotspot.locationName}
 🗺️ *Wilayah:* ${activeHotspot.province}${activeHotspot.regency ? `, ${activeHotspot.regency}` : ''}
@@ -228,8 +235,10 @@ ${wettingInfo}
 • Himbauan Warga: ${selectedAirQuality ? selectedAirQuality.ispuInfo.maskRecommendation : 'Gunakan masker N95'}, waspada sebaran asap tebal di sektor *${blowTowardsCardinal || 'rambatan'}*.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🗺️ *Tautan Google Maps:* ${gmapsUrl}
-_Laporan dibuat otomatis via SiagaNusa (Sistem Komando Pantau Karhutla Indonesia)_`;
+🗺️ *Buka Peta Interaktif & Arah Angin SiagaNusa:*
+${siagaNusaUrl}
+
+_Laporan situasi resmi disiarkan melalui SiagaNusa (Sistem Komando Pantau Karhutla Indonesia)_`;
   }, [
     activeHotspot,
     formatTime,

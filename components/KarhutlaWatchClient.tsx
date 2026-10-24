@@ -185,6 +185,32 @@ export default function KarhutlaWatchClient() {
     }
   }, []);
 
+  // Otomatis pilih & sorot titik api jika link dibuka dari tautan WhatsApp (?hotspot= atau ?lat=&lng=)
+  useEffect(() => {
+    if (typeof window === 'undefined' || hotspots.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const targetId = params.get('hotspot');
+    const targetLat = parseFloat(params.get('lat') || '');
+    const targetLng = parseFloat(params.get('lng') || '');
+
+    if (targetId) {
+      const match = hotspots.find((h) => h.id === targetId);
+      if (match) {
+        handleHotspotClick(match);
+        return;
+      }
+    }
+
+    if (!isNaN(targetLat) && !isNaN(targetLng)) {
+      const closest = hotspots.find(
+        (h) => Math.abs(h.latitude - targetLat) < 0.05 && Math.abs(h.longitude - targetLng) < 0.05
+      );
+      if (closest) {
+        handleHotspotClick(closest);
+      }
+    }
+  }, [hotspots, handleHotspotClick]);
+
   const handleResetView = useCallback(() => {
     if (mapResetRef.current) mapResetRef.current();
     setSelectedHotspot(null);
