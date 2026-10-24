@@ -20,6 +20,26 @@ export const metadata: Metadata = {
     description:
       'Platform numerik interaktif memodelkan penjalaran gelombang tsunami dari patahan megathrust laut dalam hingga proyeksi zona rendaman permukiman.',
     type: 'website',
+    url: 'https://siaganusa.vercel.app/tsunami',
+    siteName: 'SiagaNusa',
+    locale: 'id_ID',
+    images: [
+      {
+        url: '/images/og-siaganusa.jpg',
+        width: 1376,
+        height: 768,
+        alt: 'Simulator Tsunami Nusantara – SiagaNusa',
+        type: 'image/jpeg',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Simulator Tsunami Nusantara – SiagaNusa',
+    description:
+      'Platform numerik interaktif memodelkan penjalaran gelombang tsunami dari patahan megathrust laut dalam hingga proyeksi zona rendaman permukiman.',
+    images: ['/images/og-siaganusa.jpg'],
+    creator: '@levystudios',
   },
 };
 
