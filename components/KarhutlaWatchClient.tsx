@@ -351,8 +351,10 @@ export default function KarhutlaWatchClient() {
             title="Dukung pemeliharaan aplikasi via Saweria"
           >
             ☕ Dukung Aplikasi
-          </button>{' '}
-          · Dibuat untuk Indonesia
+          </button>
+        </p>
+        <p className="footer-copyright">
+          &copy; 2026 SiagaNusa by <strong>levy-studios</strong> · Dibuat untuk Indonesia 🇮🇩
         </p>
       </footer>
 

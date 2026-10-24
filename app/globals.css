@@ -1556,6 +1556,27 @@ body {
   font-weight: 400;
 }
 
+.footer-copyright {
+  text-align: center;
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 6px;
+  font-weight: 400;
+}
+
+.footer-copyright strong {
+  font-weight: 600;
+  color: #334155;
+}
+
+[data-theme="dark"] .footer-copyright {
+  color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .footer-copyright strong {
+  color: var(--color-text-secondary);
+}
+
 .footer-link {
   color: #0f172a;
   font-weight: 700;

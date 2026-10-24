@@ -634,7 +634,7 @@ export default function AdminDashboardPage() {
       {/* ─── Footer ─────────────────────────────────────────────────── */}
       <footer className="mt-8 w-full border-t border-slate-800/80 py-6 text-center text-xs text-slate-500">
         <div className={CONTAINER}>
-          <p>SiagaNusa Admin Console &copy; 2026 · Akses terbatas</p>
+          <p>SiagaNusa Admin Console &copy; 2026 by <strong>levy-studios</strong> · Akses terbatas</p>
         </div>
       </footer>
     </div>

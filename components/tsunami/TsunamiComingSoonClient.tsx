@@ -431,7 +431,7 @@ export default function TsunamiComingSoonClient() {
       <footer className="border-t border-slate-900 bg-slate-950 py-8 text-center text-xs text-slate-500">
         <div className="max-w-[1400px] mx-auto px-4">
           <p>
-            SiagaNusa Tsunami Simulator &copy; 2026 · Litbang Pemodelan Mitigasi Bencana Bahari Indonesia
+            SiagaNusa Tsunami Simulator &copy; 2026 by <strong>levy-studios</strong> · Litbang Pemodelan Mitigasi Bencana Bahari Indonesia
           </p>
           <p className="mt-1 text-[11px] text-slate-600">
             Didedikasikan untuk keselamatan jutaan warga pesisir Indonesia di sepanjang cincin api Pasifik &amp; zona
