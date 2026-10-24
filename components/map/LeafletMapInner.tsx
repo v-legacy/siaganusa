@@ -169,10 +169,18 @@ export default function LeafletMapInner({
     if (!mapContainerRef.current || mapRef.current) return;
 
     let mounted = true;
+    let resizeObserver: ResizeObserver | null = null;
 
     const initMap = async () => {
-      const [L] = await Promise.all([
-        import('leaflet').then((m) => m.default),
+      // 1. Muat Leaflet secara sekuensial dan pastikan window.L terdefinisi sebelum plugin apapun dimuat
+      const leafletModule = await import('leaflet');
+      const L = (leafletModule.default || leafletModule) as typeof Leaflet;
+      if (typeof window !== 'undefined') {
+        (window as unknown as { L: typeof L }).L = L;
+      }
+
+      // 2. Sekarang aman memuat plugin markercluster dan stylesheet Leaflet
+      await Promise.all([
         import('leaflet/dist/leaflet.css'),
         import('leaflet.markercluster'),
         import('leaflet.markercluster/dist/MarkerCluster.css'),
@@ -221,13 +229,26 @@ export default function LeafletMapInner({
         setIsMapReady(true);
       }
 
-      // Invalidate size agar Leaflet segera membaca dimensi kontainer layar (sangat krusial untuk perangkat mobile)
+      // ResizeObserver untuk mendeteksi perubahan ukuran kontainer secara real-time
+      if (typeof ResizeObserver !== 'undefined' && mapContainerRef.current) {
+        resizeObserver = new ResizeObserver(() => {
+          if (mapRef.current) {
+            mapRef.current.invalidateSize();
+          }
+        });
+        resizeObserver.observe(mapContainerRef.current);
+      }
+
+      // Invalidate size agar Leaflet segera membaca dimensi kontainer layar
+      requestAnimationFrame(() => {
+        if (mounted && map) map.invalidateSize();
+      });
       setTimeout(() => {
         if (mounted && map) map.invalidateSize();
-      }, 150);
+      }, 100);
       setTimeout(() => {
         if (mounted && map) map.invalidateSize();
-      }, 600);
+      }, 400);
     };
 
     const handleResize = () => {
@@ -244,6 +265,9 @@ export default function LeafletMapInner({
     return () => {
       mounted = false;
       setIsMapReady(false);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
       if (mapRef.current) {
