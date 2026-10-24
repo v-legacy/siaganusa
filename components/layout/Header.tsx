@@ -124,15 +124,26 @@ export default function Header({
 
         {/* ─── Actions: Desktop Nav + Theme + Hamburger ─────────────────── */}
         <div className="header-actions">
-          {/* Navigasi Desktop (HANYA tampil di layar desktop >= 1024px) */}
-          <div className="header-desktop-actions">
-            {/* Tombol Akses Simulator Tsunami */}
-            <Link
-              id="btn-header-tsunami"
-              href="/tsunami"
-              className="header-nav-btn header-tsunami-btn"
-              title="Simulator Tsunami"
-              aria-label="Simulator Tsunami"
+          {/* Tombol Akses Simulator Tsunami */}
+          <Link
+            id="btn-header-tsunami"
+            href="/tsunami"
+            className="header-tsunami-btn"
+            title="Simulator Tsunami"
+            aria-label="Simulator Tsunami"
+          >
+            <Waves size={15} />
+            <span>Simulator Tsunami</span>
+          </Link>
+
+          {onOpenDonation && (
+            <button
+              id="btn-header-donation"
+              type="button"
+              className="header-nav-btn header-donation-btn"
+              onClick={onOpenDonation}
+              title="Dukung / Donasi Operasional SiagaNusa via Saweria"
+              aria-label="Donasi Saweria"
             >
               <Waves size={15} className="header-nav-icon" />
               <span className="header-nav-label">Simulator Tsunami</span>
