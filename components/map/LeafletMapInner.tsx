@@ -171,14 +171,13 @@ export default function LeafletMapInner({
     let mounted = true;
 
     const initMap = async () => {
-      const L = (await import('leaflet')).default;
-      await import('leaflet/dist/leaflet.css');
-
-      if (!mounted || !mapContainerRef.current) return;
-
-      await import('leaflet.markercluster');
-      await import('leaflet.markercluster/dist/MarkerCluster.css');
-      await import('leaflet.markercluster/dist/MarkerCluster.Default.css');
+      const [L] = await Promise.all([
+        import('leaflet').then((m) => m.default),
+        import('leaflet/dist/leaflet.css'),
+        import('leaflet.markercluster'),
+        import('leaflet.markercluster/dist/MarkerCluster.css'),
+        import('leaflet.markercluster/dist/MarkerCluster.Default.css'),
+      ]);
 
       if (!mounted || !mapContainerRef.current) return;
 
@@ -303,6 +302,9 @@ export default function LeafletMapInner({
         ? MCG({
             maxClusterRadius: 45,
             showCoverageOnHover: true,
+            chunkedLoading: true,
+            chunkInterval: 100,
+            chunkDelay: 10,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             iconCreateFunction: (c: any) => {
               const count = c.getChildCount();
@@ -327,43 +329,47 @@ export default function LeafletMapInner({
         const icon = createFireIcon(L, hotspot.confidence, isSelected, hotspot.maxFrp);
         const marker = L.marker([hotspot.latitude, hotspot.longitude], { icon });
 
-        const d = new Date(hotspot.detectedAt);
-        const timeStr = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-        const dateStr = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-        const { fill, label } = CONFIDENCE_COLORS[hotspot.confidence] || CONFIDENCE_COLORS.LOW;
+        // Evaluasi isi tooltip secara lazy (hanya saat kursor diarahkan ke marker)
+        // Ini menghindari kompilasi string & Date parsing untuk 1.000+ marker saat inisialisasi awal (mengurangi TBT).
+        marker.bindTooltip(
+          () => {
+            const d = new Date(hotspot.detectedAt);
+            const timeStr = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            const dateStr = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+            const { fill, label } = CONFIDENCE_COLORS[hotspot.confidence] || CONFIDENCE_COLORS.LOW;
+            const frpText = hotspot.maxFrp ? `${hotspot.maxFrp.toFixed(1)} MW` : 'Tidak Terukur';
+            const sensorCountText = hotspot.count ? `${hotspot.count} titik sensor` : '1 titik';
 
-        const frpText = hotspot.maxFrp ? `${hotspot.maxFrp.toFixed(1)} MW` : 'Tidak Terukur';
-        const sensorCountText = hotspot.count ? `${hotspot.count} titik sensor` : '1 titik';
+            return `
+              <div style="font-family:system-ui,sans-serif;min-width:210px;border-radius:8px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.18);">
+                <div style="background:${fill};color:white;padding:6px 10px;font-weight:700;font-size:11px;display:flex;justify-content:space-between;align-items:center;">
+                  <span>🔥 ${label} Confidence</span>
+                  <span style="font-size:10px;background:rgba(0,0,0,0.2);padding:1px 6px;border-radius:4px;">${frpText}</span>
+                </div>
+                <div style="padding:10px;background:white;color:#1f2937;">
+                  <div style="font-weight:700;font-size:13px;color:#111827;margin-bottom:2px;">${hotspot.locationName}</div>
+                  <div style="color:#4b5563;font-size:11px;margin-bottom:6px;">📍 ${hotspot.province}</div>
+                  
+                  <div style="background:#f9fafb;border:1px solid #f3f4f6;border-radius:6px;padding:6px;font-size:11px;display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px;">
+                    <div><span style="color:#6b7280;">Daya:</span> <b>${frpText}</b></div>
+                    <div><span style="color:#6b7280;">Kluster:</span> <b>${sensorCountText}</b></div>
+                    <div style="grid-column:span 2;"><span style="color:#6b7280;">Satelit:</span> ${hotspot.satellite}</div>
+                  </div>
 
-        const tooltipContent = `
-          <div style="font-family:system-ui,sans-serif;min-width:210px;border-radius:8px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.18);">
-            <div style="background:${fill};color:white;padding:6px 10px;font-weight:700;font-size:11px;display:flex;justify-content:space-between;align-items:center;">
-              <span>🔥 ${label} Confidence</span>
-              <span style="font-size:10px;background:rgba(0,0,0,0.2);padding:1px 6px;border-radius:4px;">${frpText}</span>
-            </div>
-            <div style="padding:10px;background:white;color:#1f2937;">
-              <div style="font-weight:700;font-size:13px;color:#111827;margin-bottom:2px;">${hotspot.locationName}</div>
-              <div style="color:#4b5563;font-size:11px;margin-bottom:6px;">📍 ${hotspot.province}</div>
-              
-              <div style="background:#f9fafb;border:1px solid #f3f4f6;border-radius:6px;padding:6px;font-size:11px;display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px;">
-                <div><span style="color:#6b7280;">Daya:</span> <b>${frpText}</b></div>
-                <div><span style="color:#6b7280;">Kluster:</span> <b>${sensorCountText}</b></div>
-                <div style="grid-column:span 2;"><span style="color:#6b7280;">Satelit:</span> ${hotspot.satellite}</div>
-              </div>
-
-              <div style="color:#6b7280;font-size:10px;margin-bottom:6px;">🕒 ${timeStr} · ${dateStr}</div>
-              <div style="font-size:10px;color:#dc2626;font-weight:600;display:flex;align-items:center;gap:3px;">
-                <span>🎯 Klik untuk fokus & lihat aliran arah angin</span>
-              </div>
-            </div>
-          </div>`;
-
-        marker.bindTooltip(tooltipContent, {
-          direction: 'top',
-          offset: [0, -10],
-          className: 'siaganusa-tooltip',
-          sticky: false,
-        });
+                  <div style="color:#6b7280;font-size:10px;margin-bottom:6px;">🕒 ${timeStr} · ${dateStr}</div>
+                  <div style="font-size:10px;color:#dc2626;font-weight:600;display:flex;align-items:center;gap:3px;">
+                    <span>🎯 Klik untuk fokus & lihat aliran arah angin</span>
+                  </div>
+                </div>
+              </div>`;
+          },
+          {
+            direction: 'top',
+            offset: [0, -10],
+            className: 'siaganusa-tooltip',
+            sticky: false,
+          }
+        );
 
         marker.on('click', () => {
           onHotspotClick(hotspot);

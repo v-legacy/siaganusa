@@ -11,7 +11,6 @@ import dynamic from 'next/dynamic';
 import Header from '@/components/layout/Header';
 import DisasterMap from '@/components/map/DisasterMap';
 import MapFloatingControls from '@/components/map/MapFloatingControls';
-import { COACHMARK_STORAGE_KEY } from '@/constants/coachmark';
 import { useDisasterData } from '@/hooks/useDisasterData';
 import { useTheme } from '@/hooks/useTheme';
 import type { DisasterHotspot } from '@/types/disaster';
@@ -66,59 +65,60 @@ export default function KarhutlaWatchClient() {
   // Ref untuk reset tampilan peta
   const mapResetRef = useRef<(() => void) | null>(null);
 
-  // Tampilkan Coach Mark otomatis jika user belum pernah menandai "Jangan tampilkan lagi"
+  // Catat analitik kunjungan pengunjung saat main thread idle (tidak memblokir TBT / LCP)
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    try {
-      const isDismissed = localStorage.getItem(COACHMARK_STORAGE_KEY);
-      if (!isDismissed) {
-        // Beri jeda 800ms agar peta dan tata letak kontainer ter-render sempurna
-        const timer = setTimeout(() => {
-          setIsTourOpen(true);
-        }, 800);
-        return () => clearTimeout(timer);
+    const sendAnalytics = () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const utmSource = params.get('utm_source') || params.get('source') || undefined;
+        fetch('/api/analytics/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            path: window.location.pathname,
+            referrer: document.referrer || '',
+            utmSource,
+          }),
+        }).catch(() => {});
+      } catch {
+        // ignore
       }
-    } catch (err) {
-      console.warn('Gagal membaca storage coach mark:', err);
+    };
+
+    if ('requestIdleCallback' in window) {
+      const id = (window as unknown as { requestIdleCallback: (cb: () => void, opts: { timeout: number }) => number })
+        .requestIdleCallback(sendAnalytics, { timeout: 4000 });
+      return () => {
+        if ('cancelIdleCallback' in window) {
+          (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(id);
+        }
+      };
+    } else {
+      const timer = setTimeout(sendAnalytics, 2500);
+      return () => clearTimeout(timer);
     }
   }, []);
 
-  // Catat analitik kunjungan pengunjung (traffic & referral)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const utmSource = params.get('utm_source') || params.get('source') || undefined;
-      fetch('/api/analytics/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          path: window.location.pathname,
-          referrer: document.referrer || '',
-          utmSource,
-        }),
-      }).catch(() => {});
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  // Ambil pola cuaca & angin regional se-Indonesia
+  // Ambil pola cuaca & angin regional se-Indonesia secara asinkron setelah initial load
   useEffect(() => {
     let active = true;
-    fetch('/api/weather/regional')
-      .then((res) => res.json())
-      .then((json) => {
-        if (active && json.success && Array.isArray(json.data)) {
-          setRegionalWeather(json.data);
-        }
-      })
-      .catch((err) => {
-        console.warn('Gagal memuat pola angin regional:', err);
-      });
+    const timer = setTimeout(() => {
+      fetch('/api/weather/regional')
+        .then((res) => res.json())
+        .then((json) => {
+          if (active && json.success && Array.isArray(json.data)) {
+            setRegionalWeather(json.data);
+          }
+        })
+        .catch((err) => {
+          console.warn('Gagal memuat pola angin regional:', err);
+        });
+    }, 1200);
 
     return () => {
       active = false;
+      clearTimeout(timer);
     };
   }, []);
 

@@ -37,6 +37,19 @@ export default function RootLayout({
             koneksi CORS tidak akan pernah dipakai ulang oleh request tile. */}
         <link rel="preconnect" href="https://tile.openstreetmap.org" />
         <link rel="dns-prefetch" href="https://tile.openstreetmap.org" />
+        {/* Preload tile pusat peta Indonesia (Zoom 5, x=26, y=16) yang terbukti menjadi elemen LCP utama */}
+        <link
+          rel="preload"
+          as="image"
+          href="https://tile.openstreetmap.org/5/26/16.png"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="https://tile.openstreetmap.org/5/25/16.png"
+          fetchPriority="high"
+        />
       </head>
       <body className={`${inter.variable} antialiased`}>{children}</body>
     </html>

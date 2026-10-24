@@ -98,10 +98,10 @@ export default function Header({
             <div className="header-logo" aria-hidden="true">
               <Flame size={22} />
             </div>
-            <div className="header-brand-text">
+            <h1 className="header-brand-text m-0 p-0 font-normal">
               <span className="header-title">SiagaNusa</span>
               <span className="header-subtitle">Karhutla Watch</span>
-            </div>
+            </h1>
           </Link>
         </div>
 

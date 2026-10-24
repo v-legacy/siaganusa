@@ -14,6 +14,8 @@ import {
   Clock,
   ChevronUp,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Flame,
   X,
   ExternalLink,
@@ -77,7 +79,10 @@ export default function DisasterTable({
   const [isExpanded, setIsExpanded] = useState(false);
   const [copiedCoords, setCopiedCoords] = useState(false);
   const [copiedSitRep, setCopiedSitRep] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const selectedRowRef = useRef<HTMLTableRowElement>(null);
+
+  const ITEMS_PER_PAGE = 30;
 
   // Ambil objek hotspot aktif (dari prop atau dicari dari selectedId)
   const activeHotspot = selectedHotspot || hotspots.find((h) => h.id === selectedId);
@@ -87,7 +92,7 @@ export default function DisasterTable({
     if (selectedId && selectedRowRef.current) {
       selectedRowRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-  }, [selectedId]);
+  }, [selectedId, currentPage]);
 
   // Handler salin koordinat
   const handleCopyCoords = useCallback((lat: number, lng: number) => {
@@ -109,6 +114,30 @@ export default function DisasterTable({
     const matchConf = filterConf === 'ALL' || h.confidence === filterConf;
     return matchQuery && matchConf;
   });
+
+  // Sesuaikan halaman paginasi saat filter, pencarian, atau hotspot terpilih berubah
+  // Menggunakan pola resmi React untuk menyinkronkan state turunan tanpa cascading effect
+  const [prevFilter, setPrevFilter] = useState({ query: searchQuery, conf: filterConf, selectedId });
+  if (
+    prevFilter.query !== searchQuery ||
+    prevFilter.conf !== filterConf ||
+    prevFilter.selectedId !== selectedId
+  ) {
+    let nextCurrentPage = 1;
+    if (selectedId && prevFilter.selectedId !== selectedId) {
+      const idx = filtered.findIndex((h) => h.id === selectedId);
+      if (idx !== -1) {
+        nextCurrentPage = Math.floor(idx / ITEMS_PER_PAGE) + 1;
+      }
+    }
+    setPrevFilter({ query: searchQuery, conf: filterConf, selectedId });
+    setCurrentPage(nextCurrentPage);
+  }
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  const validCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (validCurrentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedHotspots = filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const formatTime = useCallback((isoString: string) => {
     const d = new Date(isoString);
@@ -851,7 +880,7 @@ _Laporan dibuat otomatis via SiagaNusa (Sistem Komando Pantau Karhutla Indonesia
               </tr>
             </thead>
             <tbody>
-              {filtered.map((hotspot) => {
+              {paginatedHotspots.map((hotspot) => {
                 const badge = CONFIDENCE_BADGE[hotspot.confidence] || CONFIDENCE_BADGE.LOW;
                 const isSelected = hotspot.id === selectedId;
                 return (
@@ -908,6 +937,46 @@ _Laporan dibuat otomatis via SiagaNusa (Sistem Komando Pantau Karhutla Indonesia
           </table>
         )}
       </div>
+
+      {/* ─── Kontrol Navigasi Halaman / Paginasi ─── */}
+      {filtered.length > 0 && (
+        <div className="table-pagination-bar" role="navigation" aria-label="Navigasi halaman tabel">
+          <span className="pagination-info">
+            Menampilkan <b>{startIndex + 1}–{Math.min(startIndex + ITEMS_PER_PAGE, filtered.length)}</b> dari{' '}
+            <b>{filtered.length.toLocaleString('id-ID')}</b> titik api
+          </span>
+
+          {totalPages > 1 && (
+            <div className="pagination-controls">
+              <button
+                type="button"
+                className="pagination-btn"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={validCurrentPage <= 1}
+                aria-label="Halaman sebelumnya"
+              >
+                <ChevronLeft size={14} />
+                <span>Sebelumnya</span>
+              </button>
+
+              <span className="pagination-page-indicator">
+                Hal. <b>{validCurrentPage}</b> / {totalPages}
+              </span>
+
+              <button
+                type="button"
+                className="pagination-btn"
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={validCurrentPage >= totalPages}
+                aria-label="Halaman berikutnya"
+              >
+                <span>Berikutnya</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </section>
   );
 }
