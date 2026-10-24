@@ -27,7 +27,6 @@ export const metadata: Metadata = {
     "Platform pemantauan titik api (hotspot) kebakaran hutan dan lahan (Karhutla) Indonesia secara real-time via data satelit NASA VIIRS & MODIS. Pantau peta interaktif, arah angin, dan kualitas udara ISPU.",
   applicationName: "SiagaNusa",
   authors: [{ name: "SiagaNusa", url: SITE_URL }],
-  generator: "Next.js",
   keywords: [
     "SiagaNusa",
     "kebakaran hutan",
@@ -90,9 +89,14 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico?v=2" },
+      { url: "/icon.png?v=2", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico?v=2",
+    apple: [
+      { url: "/apple-touch-icon.png?v=2", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
