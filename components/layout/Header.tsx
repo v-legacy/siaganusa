@@ -20,6 +20,7 @@ import {
   Waves,
   Menu,
   X,
+  Smartphone,
 } from 'lucide-react';
 import type { Theme } from '@/hooks/useTheme';
 import type { HotspotSummary } from '@/types/disaster';
@@ -167,6 +168,21 @@ export default function Header({
                 <span className="header-nav-label">Panduan</span>
               </button>
             )}
+
+            {/* Tombol Pasang Aplikasi (PWA) */}
+            <button
+              id="btn-header-pwa-install"
+              type="button"
+              className="header-nav-btn header-pwa-btn"
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('open-pwa-install'));
+              }}
+              title="Pasang Aplikasi SiagaNusa di Layar Utama HP / PC"
+              aria-label="Pasang Aplikasi"
+            >
+              <Smartphone size={15} className="header-nav-icon" />
+              <span className="header-nav-label">Pasang App</span>
+            </button>
           </div>
 
           {/* Toggle Tema (Selalu tersedia di desktop & mobile) */}
@@ -277,6 +293,23 @@ export default function Header({
                   <span className="mobile-menu-pill mobile-menu-pill--red">Panduan</span>
                 </button>
               )}
+
+              {/* 4. Pasang Aplikasi di Layar Utama (PWA) */}
+              <button
+                id="mobile-nav-btn-pwa"
+                type="button"
+                className="mobile-menu-btn mobile-menu-btn--pwa"
+                onClick={() => {
+                  closeMenu();
+                  window.dispatchEvent(new CustomEvent('open-pwa-install'));
+                }}
+              >
+                <div className="mobile-menu-btn-left">
+                  <Smartphone size={18} className="mobile-menu-icon" />
+                  <span className="mobile-menu-btn-text">Pasang Aplikasi (Home Screen)</span>
+                </div>
+                <span className="mobile-menu-pill mobile-menu-pill--emerald">App 📱</span>
+              </button>
             </div>
           </div>
         </div>,

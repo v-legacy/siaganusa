@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import PwaProvider from "@/components/pwa/PwaProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -12,6 +13,11 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+  ],
 };
 
 const SITE_URL =
@@ -27,6 +33,12 @@ export const metadata: Metadata = {
     "Platform pemantauan titik api (hotspot) kebakaran hutan dan lahan (Karhutla) Indonesia secara real-time via data satelit NASA VIIRS & MODIS. Pantau peta interaktif, arah angin, dan kualitas udara ISPU.",
   applicationName: "SiagaNusa",
   authors: [{ name: "SiagaNusa", url: SITE_URL }],
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "SiagaNusa",
+  },
   keywords: [
     "SiagaNusa",
     "kebakaran hutan",
@@ -91,7 +103,8 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico?v=2" },
-      { url: "/icon.png?v=2", type: "image/png", sizes: "512x512" },
+      { url: "/icon-192.png?v=2", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png?v=2", sizes: "512x512", type: "image/png" },
     ],
     shortcut: "/favicon.ico?v=2",
     apple: [
@@ -108,6 +121,50 @@ export default function RootLayout({
   return (
     <html lang="id" suppressHydrationWarning>
       <head>
+        {/* PWA iOS Standalone Meta Tags */}
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-touch-fullscreen" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="SiagaNusa" />
+        <meta name="format-detection" content="telephone=no" />
+
+        {/* iOS Apple Touch Icons (All Retinas & iPads) */}
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167x167.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png" />
+
+        {/* iOS Splash Screens (Apple Touch Startup Images) */}
+        <link
+          rel="apple-touch-startup-image"
+          href="/splash/apple-splash-1179-2556.jpg"
+          media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/splash/apple-splash-1290-2796.jpg"
+          media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/splash/apple-splash-1170-2532.jpg"
+          media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/splash/apple-splash-750-1334.jpg"
+          media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+        />
+        <link
+          rel="apple-touch-startup-image"
+          href="/splash/apple-splash-2048-2732.jpg"
+          media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+        />
+        <link rel="apple-touch-startup-image" href="/splash/apple-splash-screen.jpg" />
+
         {/* Preconnect ke tile server OpenStreetMap.
             Tanpa crossOrigin: tile Leaflet dimuat sebagai <img> non-CORS, sehingga
             koneksi CORS tidak akan pernah dipakai ulang oleh request tile. */}
@@ -127,7 +184,11 @@ export default function RootLayout({
           fetchPriority="high"
         />
       </head>
-      <body className={`${inter.variable} antialiased`}>{children}</body>
+      <body className={`${inter.variable} antialiased`}>
+        {children}
+        <PwaProvider />
+      </body>
     </html>
   );
 }
+

@@ -196,8 +196,8 @@ export default function KarhutlaWatchClient() {
     if (targetId) {
       const match = hotspots.find((h) => h.id === targetId);
       if (match) {
-        handleHotspotClick(match);
-        return;
+        const timer = setTimeout(() => handleHotspotClick(match), 0);
+        return () => clearTimeout(timer);
       }
     }
 
@@ -206,7 +206,8 @@ export default function KarhutlaWatchClient() {
         (h) => Math.abs(h.latitude - targetLat) < 0.05 && Math.abs(h.longitude - targetLng) < 0.05
       );
       if (closest) {
-        handleHotspotClick(closest);
+        const timer = setTimeout(() => handleHotspotClick(closest), 0);
+        return () => clearTimeout(timer);
       }
     }
   }, [hotspots, handleHotspotClick]);
